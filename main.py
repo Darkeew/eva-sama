@@ -83,7 +83,6 @@ try:
         if cs.check_stream == False and isBrowserAlive():
             screenshotting.stop()
             browser.quit()
-        channel = client.get_channel(1094701982507348079)
 
         recentImage = False
         counter = 0
@@ -101,7 +100,7 @@ try:
                     print('[!] Sending to Discord...')
                     file = discord.File(bytes, filename='result.png')
                     timestamp = round(time.time())
-                    await channel.send(f'Timestamp: <t:{timestamp}:F>',file=file)
+                    await thread.send(f'Timestamp: <t:{timestamp}:F>',file=file)
                     templates = []
                     break
                 elif counter == len(templates):
