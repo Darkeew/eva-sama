@@ -117,7 +117,7 @@ try:
     async def check_stream():
         if cs.check_stream():
             browser = webdriver.Firefox()
-            browser.get('https://www.twitch.tv/xQc')
+            browser.get('https://www.twitch.tv/vedal987')
             browser.fullscreen_window()
             sb.start(browser)
             await screenshotting.start()
