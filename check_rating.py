@@ -3,7 +3,7 @@ import numpy as np
 import pyautogui
 
 
-def rating(coords):
+def rating(coords, template):
     image = pyautogui.screenshot(region=(coords))
     image = np.array(image)
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -11,8 +11,16 @@ def rating(coords):
     upper = np.array([0,0,0])
     mask = cv2.inRange(hsv, lower, upper)
     image = 255 - mask
+    cv2.imshow('test', image)
+    cv2.waitKey(1)
     rating = np.sum(image == 0)
-    if rating == 0:
-        return True
+    if template == 'karaoke':
+        if rating > 200:
+            return True
+        else:
+            return False
     else:
-        return False
+        if rating == 0:
+            return True
+        else:
+            return False
