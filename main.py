@@ -222,7 +222,7 @@ try:
 
 
 
-    client.run("MTA4MzgyNzAxOTk2NTU0NjYwNg.GsLR1I._7QE28yuEiTIAPfljMdc9pTGllr-q19m_f0Fd4")
+    client.run("TOKEN")
 except ValueError:
     print(f'There has been an error: {str(ValueError)}')
     
