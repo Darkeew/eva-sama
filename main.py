@@ -6,6 +6,7 @@ import time
 import final_check as fc
 import check_stream as cs
 import start_browser as sb
+import translation
 from io import BytesIO
 from selenium import webdriver
 
@@ -23,18 +24,18 @@ try:
         else:
             return False
         
-    @client.event
-    async def on_message(message):
-        moderator = discord.utils.get(message.guild.roles, id=574931772781887488)
-        admin = discord.utils.get(message.guild.roles, id=574720716025626654)
-        vedal = discord.utils.get(message.guild.roles, id=574724513376370691)
-        roles = message.author.roles
-        author = message.author.id
-        if moderator in roles or admin in roles or vedal in roles or author == 452436342841016341 or author == 278232398372798464 or author == 854064215354114088:
-            if message.channel.id == 1067638175478071307 and message.content.startswith('?unlock'):
-                await message.reply('Dont forget to start <@!1083827019965546606> using `>start`!')
-            if message.channel.id == 1067638175478071307 and message.content.startswith('?lock'):
-                await message.reply('Dont forget to stop <@!1083827019965546606> using `>stop`!')
+    #@client.event
+    #async def on_message(message):
+    #    moderator = discord.utils.get(message.guild.roles, id=574931772781887488)
+    #    admin = discord.utils.get(message.guild.roles, id=574720716025626654)
+    #    vedal = discord.utils.get(message.guild.roles, id=574724513376370691)
+    #    roles = message.author.roles
+    #    author = message.author.id
+    #    if moderator in roles or admin in roles or vedal in roles or author == 452436342841016341 or author == 278232398372798464 or author == 854064215354114088:
+    #        if message.channel.id == 1067638175478071307 and message.content.startswith('?unlock'):
+    #            await message.reply('Dont forget to start <@!1083827019965546606> using `>start`!')
+    #        if message.channel.id == 1067638175478071307 and message.content.startswith('?lock'):
+    #            await message.reply('Dont forget to stop <@!1083827019965546606> using `>stop`!')
             
         
     @client.event
@@ -123,7 +124,8 @@ try:
     counter = 0
     recentImage = True
     pause = False
-    browser = webdriver.Firefox()
+    translation.start_browser()
+    browser = None
     
     @tasks.loop()
     async def screenshotting():
@@ -133,7 +135,10 @@ try:
         thread = channel.get_thread(1085238141574713384)
         global templates, counter, recentImage, browser, pause
         if cs.check_stream() == False:
-            await check_stream.start()
+            try:
+                await check_stream.start()
+            except:
+                check_stream.stop()
 
         coords = 740, 900, 350, 100
         if cr.rating((coords), tmp) and recentImage == False and pause == False:
@@ -150,6 +155,13 @@ try:
                     file = discord.File(bytes, filename='result.png')
                     timestamp = round(time.time())
                     await thread.send(f'Timestamp: <t:{timestamp}:F>',file=file)
+                    try:
+                        file = translation.translate(template, tmp)
+                        jp_channel = client.get_channel(1074104294845972610)
+                        jp_thread = jp_channel.get_thread(1106334613221167124)
+                        await jp_thread.send(f'タイムスタンプ: <t:{timestamp}:F>',file=file)
+                    except:
+                        pass
                     templates = []
                     counter = 0
                     break
@@ -159,9 +171,10 @@ try:
                     templates = []
                     counter = 0
                 else:
-                    counter =+ 1
+                    counter += 1
         else:
-            recentImage = False
+            if cr.rating((coords), tmp) == False:
+                recentImage = False
             template = pyautogui.screenshot()
             templates.insert(0, template)
             
@@ -180,11 +193,36 @@ try:
             browser.get('https://www.twitch.tv/vedal987')
             browser.fullscreen_window()
             sb.start(browser)
-            await screenshotting.start()
+            try:
+                await screenshotting.start()
+            except:
+                screenshotting.stop()
 
-            
-            
-    client.run("TOKEN")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    client.run("MTA4MzgyNzAxOTk2NTU0NjYwNg.GsLR1I._7QE28yuEiTIAPfljMdc9pTGllr-q19m_f0Fd4")
 except ValueError:
     print(f'There has been an error: {str(ValueError)}')
     
